@@ -5,56 +5,37 @@ from sklearn.metrics import r2_score, mean_squared_error
 import pandas as pd
 
 def xgboost_regression_optimization(X_train, y_train, X_test, y_test, feature_name):
+      
+# detaG
     '''   
+    # target: ee values
     params = {
-        'n_estimators':  800, 
-        'learning_rate':  0.035721,
-        'max_depth': 12, 
-        'min_child_weight':  9.677133, 
-        'gamma': 0.858624, 
-        'subsample':  0.679918, 
-        'colsample_bytree': 0.414259, 
+        'n_estimators': 500,
+        'learning_rate': 0.054304151188639314,
+        'max_depth': 11, 
+        'min_child_weight': 2.9994614406927522, 
+        'gamma': 0.0014219012957643747, 
+        'subsample': 0.897689757391236, 
+        'colsample_bytree': 0.3753320973743237
     }
-    params = {
-        'n_estimators':  50, 
-        'learning_rate':  0.13418273566601466,
-        'max_depth': 1, 
-        'min_child_weight':  2.638843535216844, 
-        'gamma': 22.784619952418645, 
-        'subsample':  0.69760881, 
-        'colsample_bytree': 0.8251507366635625, 
-    }
-
-    params = {
-        'n_estimators':  600, 
-        'learning_rate':  0.064774,
-        'max_depth': 6, 
-        'min_child_weight':  0.00423013, 
-        'gamma': 59.377322, 
-        'subsample':  0.841406, 
-        'colsample_bytree': 0.307238, 
-    }
-   
-    params = {
-        'n_estimators':  500, 
-        'learning_rate':  0.039517,
-        'max_depth': 12, 
-        'min_child_weight':  0.0000416479, 
-        'gamma': 0.025734, 
-        'subsample':  0.59953, 
-        'colsample_bytree': 0.290323, 
-    }
-
     '''
+     # target: detaG values
+
     params = {
-        'n_estimators':  300, 
-        'learning_rate': 0.034077577867180235,
-        'max_depth': 12, 
-        'min_child_weight':  0.00020427607003169405, 
-        'gamma': 0.0068555569725657585, 
-        'subsample':  0.38807507004052255, 
-        'colsample_bytree': 0.6075962191609715, 
+
+        'n_estimators': 550, 
+        'learning_rate': 0.12222696963658544, 
+        'max_depth': 9, 
+        'min_child_weight': 5.50087269554148, 
+        'gamma': 0.002397046948904361, 
+        'subsample': 0.9944840879115209, 
+        'colsample_bytree': 0.4359655012429955
     }
+
+
+
+
+    
      
     
    
@@ -89,19 +70,19 @@ def xgboost_regression_optimization(X_train, y_train, X_test, y_test, feature_na
     
     # 获取特征重要性
     feature_importance = model.feature_importances_
-
+    #'''
     # 创建一个包含特征名和对应重要性分数的DataFrame
     feature_importance_df = pd.DataFrame({'Feature': feature_name.columns, 'Importance': feature_importance})
 
     # 按特征重要性分数降序排序
     feature_importance_df = feature_importance_df.sort_values(by='Importance', ascending=False)
 
-    
-    model.save_model('/mnt/c/Ben_workspace/PythonCode/ICat/Model/ICat_xgb2.model')
+    #'''
+    model.save_model('/mnt/c/Ben_workspace/PythonCode/ICat/Model/ICat_xgb1205_detaG.model')
 
+   
 
-
-    return final_r2, rmse, train_pred, y_pred,  feature_importance_df
+    return final_r2, rmse, train_pred, y_pred,  feature_importance_df , y_train, y_test
 
 
 

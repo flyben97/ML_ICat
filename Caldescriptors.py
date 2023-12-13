@@ -160,94 +160,147 @@ def smi_pp(smi, df):
 
     return pp_temp
 
+def smi_add_pp(add_smi1, add_smi2, eq2, eq3, df):
 
-def caldescriptors(df):
+    rd_temp = []  
+
+    for i in range(0,df.shape[0]):
+
+
+        crd_ds1 = np.array(rdkit_descriptor(add_smi1[i])) 
+        crd_ds2 = np.array(rdkit_descriptor(add_smi2[i]))
+
+        add1 = float(eq2[i])
+        add2 = float(eq3[i])
+
+        if add1 == 0 and add2 == 0:
+            C1 = 0
+            C2 = 0
+        else:
+            C1 = (add1)/(add1+add2)
+            C2 = (add2)/(add1+add2)
+
+        crd_ds = crd_ds1 * C1 + crd_ds2 * C2
+
+        rd_temp.append(crd_ds)  
+
+    pp_temp = pd.DataFrame(rd_temp) 
+    pp_temp = pp_temp.fillna(0)  
+
+    return pp_temp
+
+def smi_sol_pp(sol_smi1, sol_smi2, vv, df):
+
+    rd_temp = []  
+
+    for i in range(0,df.shape[0]):
+
+
+        crd_ds1 = np.array(rdkit_descriptor(sol_smi1[i])) 
+        crd_ds2 = np.array(rdkit_descriptor(sol_smi2[i]))
+
+        radio_sol = float(vv[i])
+
+        crd_ds = crd_ds1 * (radio_sol)/(radio_sol+1) + crd_ds2 * (radio_sol)/(radio_sol+1)
+
+        rd_temp.append(crd_ds)  
+
+    pp_temp = pd.DataFrame(rd_temp) 
+    pp_temp = pp_temp.fillna(0)  
+
+    return pp_temp
+
+
+def caldescriptors(df,df_solvent):
 
     sub_smi = df.iloc[:,1]
-    precat_smi = df.iloc[:,2]
+    product_smi = df.iloc[:,2]
+    precat_smi = df.iloc[:,4]
 
-    add_smi1 = df.iloc[:,5]
-    add_smi2 = df.iloc[:,7]
+    eq1 = df.iloc[:,5]
 
-    sol_smi1 = df.iloc[:,9]
-    sol_smi2 = df.iloc[:,10]
+    temp = df.iloc[:,7]
+
+    add1_smi = df.iloc[:,8]
+    eq2 = df.iloc[:,9]
+    add2_smi = df.iloc[:,10]
+    eq3 = df.iloc[:,11]
+
+    sol1_smi = df.iloc[:,12]
+    sol2_smi = df.iloc[:,13]
+
+    vv = df.iloc[:,14]
+
+    condition = df.iloc[:,15:22]
+
+    DFT_descriptors = df.iloc[:,22:29]
+
+    ee = df.iloc[:,30]
+
+
+    sol1_result = np.zeros([df.shape[0],5])
+
+    for i in range(0,df.shape[0]):
+        for j in range(0,df_solvent.shape[0]):
+            if sol1_smi[i] == df_solvent.iloc[j,0]:
+                sol1_result[i,0] = df_solvent.iloc[j,1]
+                sol1_result[i,1] = df_solvent.iloc[j,2]
+                sol1_result[i,2] = df_solvent.iloc[j,3]
+                sol1_result[i,3] = df_solvent.iloc[j,4]
+                sol1_result[i,4] = df_solvent.iloc[j,5]
+
+    sol1_result = pd.DataFrame(sol1_result)
+
+    sol2_result = np.zeros([df.shape[0],5])
+
+    for i in range(0,df.shape[0]):
+        for j in range(0,df_solvent.shape[0]):
+            if sol2_smi[i] == df_solvent.iloc[j,0]:
+                sol2_result[i,0] = df_solvent.iloc[j,1]
+                sol2_result[i,1] = df_solvent.iloc[j,2]
+                sol2_result[i,2] = df_solvent.iloc[j,3]
+                sol2_result[i,3] = df_solvent.iloc[j,4]
+                sol2_result[i,4] = df_solvent.iloc[j,5]
+
+    sol2_result = pd.DataFrame(sol2_result)
 
     sub_fp_temp = smi_fp(sub_smi,df)
+    product_fp_temp = smi_fp(product_smi,df)
     precat_fp_temp = smi_fp(precat_smi,df)
-    add1_fp_temp = smi_fp(add_smi1,df)
-    add2_fp_temp = smi_fp(add_smi2,df)
-    sol1_fp_temp = smi_fp(sol_smi1,df)
-    sol2_fp_temp = smi_fp(sol_smi2,df)
 
     sub_pp_temp = smi_pp(sub_smi,df)
+    product_pp_temp = smi_pp(product_smi,df)
     precat_pp_temp = smi_pp(precat_smi,df)
-    add1_pp_temp = smi_pp(add_smi1,df)
-    add2_pp_temp = smi_pp(add_smi2,df)
-    sol1_pp_temp = smi_pp(sol_smi1,df)
-    sol2_pp_temp = smi_pp(sol_smi2,df)
+    add_pp_temp = smi_add_pp(add1_smi, add2_smi, eq2, eq3, df)
+    #sol_pp_temp = smi_sol_pp(sol1_smi, sol2_smi, vv, df)
+ 
 
-    eq1 = df.iloc[:,3]
-    temp = df.iloc[:,4]
-    eq2 = df.iloc[:,6]
-    eq3 = df.iloc[:,8]
-    vv = df.iloc[:,11:15]
-
-    ICatKit_features = ICatKit.cal_Icatfp(precat_smi, df.shape[0])
-
-    fp_data = {
-    'eq1':eq1,
-    'temp':temp,
-    'eq2':eq2,
-    'eq3':eq3,
-    'vv':vv,
-    'sub': sub_fp_temp,
-    'precat': precat_fp_temp,
-    'add1': add1_fp_temp,
-    'add2': add2_fp_temp,
-    'sol1': sol1_fp_temp,
-    'sol2': sol2_fp_temp,
-    }
 
     pp_data = {
         'eq1':eq1,
         'temp':temp,
+        'remain_condition':condition,
+        'sub': sub_pp_temp,
+        'sub2': sub_fp_temp,
+        'prod':product_pp_temp,
+        'prod2':product_fp_temp,
+        'precat': precat_pp_temp,
+        'precat2': precat_fp_temp,
+        'precat_qm': DFT_descriptors,
+        'add': add_pp_temp,
+        'vv':vv,
         'eq2':eq2,
         'eq3':eq3,
-        'vv':vv,
-        'sub': sub_pp_temp,
-        'precat': precat_pp_temp,
-        'add1': add1_pp_temp,
-        'add2': add2_pp_temp,
-        'sol1': sol1_pp_temp,
-        'sol2': sol2_pp_temp,
+        'sol1': sol1_result,
+        'sol2': sol2_result,
     }
 
-    fp_pp_data = {
-        'eq1':eq1,
-        'temp':temp,
-        'eq2':eq2,
-        'eq3':eq3,
-        'vv':vv,
-        'sub': sub_fp_temp,
-        'precat': precat_fp_temp,
-        'add1': add1_fp_temp,
-        'add2': add2_fp_temp,
-        'sol1': sol1_fp_temp,
-        'sol2': sol2_fp_temp,
-        'sub2': sub_pp_temp,
-        'precat2': precat_pp_temp,
-        'add12': add1_pp_temp,
-        'add22': add2_pp_temp,
-        'sol12': sol1_pp_temp,
-        'sol22': sol2_pp_temp,
-        #'ICatKit':ICatKit_features
-    }
 
     #yield_data = df.iloc[:,15]
 
-    targets_temp = df.iloc[:,16]
+    targets_temp = df.iloc[:,30]
 
-    features_temp = pd.DataFrame(pd.concat(fp_pp_data, axis=1))
+    features_temp = pd.DataFrame(pd.concat(pp_data, axis=1)) 
 
     current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 

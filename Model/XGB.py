@@ -8,7 +8,7 @@ def xgboost_regression_optimization(X_train, y_train, X_test, y_test, n_trials=1
     def objective(trial):
 
         params = {
-            'n_estimators': trial.suggest_categorical('n_estimators', [300, 400, 500, 800]),
+            'n_estimators': trial.suggest_categorical('n_estimators', [300, 350, 400, 450, 500, 550, 600, 800]),
             'learning_rate': trial.suggest_float('learning_rate', 0.001, 1.0, log=True),
             'max_depth': trial.suggest_int('max_depth', 1, 20),
             'min_child_weight': trial.suggest_float('min_child_weight', 1e-5, 1e5, log=True),
