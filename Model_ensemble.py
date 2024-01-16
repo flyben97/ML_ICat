@@ -27,7 +27,7 @@ def modelcal(features_fp, targets_temp):
 
     results = {}
 
-    # 调用字典中的函数进行超参数优化并存储结果
+    # Invoke the function in the dictionary for hyperparameter optimization and store the results
     for regression_name, regression_function in regression_functions.items():
 
         if regression_name != 'ANN':
@@ -96,7 +96,7 @@ def modelcal(features_fp, targets_temp):
                                         }
     
 
-    # 打印所有模型的结果
+    # Print the results for all models.
     for regression_name, result in results.items():
         print("------------------------------------------------------")
         print(f"Model: {regression_name}")
