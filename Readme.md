@@ -1,22 +1,60 @@
-The datasets used for building models in this job, as well as the experimental data, are all stored in the 'Dataset' folder.
+# ⚛️ ICat: Predicting Enantioselectivity in Hypervalent Iodine(III)-Catalyzed Dearomatizations
 
-Before running the program, you need to install packages such as numpy, pandas, rdkit, sklearn, torch, optuna, etc.
+**📄 Publication:**  
+ [https://doi.org/10.31635/ccschem.024.202303774]
 
-1.  Python 3.10.9
-2. Scikit-learn 1.2.1
-3. RDKit 2022.09.5
-4. PyTorch 2.0.1+cpu
-5. Optuna 3.3.0
+## 🌟 Project Summary
 
-The main function of the program is in ICat_main.py, where the overall computational logic of the entire code is written. The 'Model' folder contains all the machine learning algorithms used in this work. ICat_xgb1205_ee/detaG is the trained model. (I misspelled 'delta' here, and due to not noticing it initially, all instances in the code are written as 'deta.' The correct spelling, based on the correct pronunciation, should be 'delta.)
+This repository provides the code, pretrained models, and datasets for **ICat**, a machine learning framework developed to predict **enantioselectivity (ΔΔG‡)** in **hypervalent iodine(III)-catalyzed asymmetric phenolic dearomatization** reactions.
 
-Caldescriptors.py is a program for calculating descriptors. It concatenates molecular fingerprints calculated from the SMILES of compounds with other descriptors, such as solvent descriptors, to form a structured dataset used to train machine learning models in our work.
+Our approach combines molecular fingerprints and solvent descriptors with ensemble machine learning algorithms to deliver accurate and generalizable predictions.
 
-EDC.py is a program that partitions the dataset based on the Euclidean distance.
+## ⚙️ Installation
 
-ICat_main.py is the main program.
+Make sure your environment uses **Python 3.10.9**. Then install the required packages:
 
-Model_ensemble.py is a code that calls a collection of machine learning algorithms under the Model folder.
+```bash
+pip install numpy pandas scikit-learn==1.2.1 torch==2.0.1+cpu optuna==3.3.0
+````
+
+## 🚀 Quick Start
+
+1. **Prepare Your Data**
+   Place your dataset (e.g. SMILES strings, experimental values) into the `Dataset/` directory.
+
+2. **Generate Descriptors**
+   Run `Caldescriptors.py` to calculate molecular fingerprints and solvent descriptors. These are concatenated into feature vectors for model training.
+
+3. **Partition the Dataset (Optional)**
+   Use `EDC.py` to split the dataset based on Euclidean distance clustering, useful for model evaluation and analysis.
+
+4. **Run the Main Program**
+   Execute the entire prediction pipeline using:
+
+   ```bash
+   python ICat_main.py
+   ```
+
+5. **Model Ensemble (Optional)**
+   Run `Model_ensemble.py` to apply and evaluate a set of ML models defined in the `Model/` folder.
+
+## Notes
+
+* The pretrained model is saved in the `ICat_xgb1205_ee/detaG` directory.
+* **Typo Note:** The term "`detaG`" is a consistent misspelling of "`deltaG`" (ΔG) throughout the codebase. It has been preserved for compatibility.
+
+---
+
+## Citation
+
+If you use this repository in your research, please cite:
+
+> **Ben Gao**, **Liu Cai**, **Yuchen Zhang**, **Huaihai Huang**, **Yao Li**, **Xiao-Song Xue**.
+> *A machine learning model for predicting enantioselectivity in hypervalent iodine (iii) catalyzed asymmetric phenolic dearomatizations*
+> **CCS Chemistry**, 6 (10), 2515–2528, 2024
+
+
+
 
 
 
