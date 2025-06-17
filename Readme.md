@@ -25,17 +25,14 @@ pip install numpy pandas scikit-learn==1.2.1 torch==2.0.1+cpu optuna==3.3.0
 2. **Generate Descriptors**
    Run `Caldescriptors.py` to calculate molecular fingerprints and solvent descriptors. These are concatenated into feature vectors for model training.
 
-3. **Partition the Dataset (Optional)**
-   Use `EDC.py` to split the dataset based on Euclidean distance clustering, useful for model evaluation and analysis.
-
-4. **Run the Main Program**
+3. **Run the Main Program**
    Execute the entire prediction pipeline using:
 
    ```bash
    python ICat_main.py
    ```
 
-5. **Model Ensemble (Optional)**
+4. **Model Ensemble (Optional)**
    Run `Model_ensemble.py` to apply and evaluate a set of ML models defined in the `Model/` folder.
 
 ## Notes
